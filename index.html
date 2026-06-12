@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BT_D34</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                min-height: 100vh;
+                padding: 40px 20px;
+            }
+            #root {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            ul {
+                list-style: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 24px;
+            }
+            li {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.3s,
+                    box-shadow 0.3s;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            li:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 9px 24px rgba(0, 0, 0, 0.15);
+            }
+            a {
+                text-decoration: none;
+                color: #1a1a1a;
+            }
+            h2 {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <h2>BTVN D34</h2>
+            <ul>
+                <li>
+                    <a href="counter.html">Counter App</a>
+                </li>
+                <li>
+                    <a href="todo.html">Todo App</a>
+                </li>
+                <li>
+                    <a href="profile.html">Profile Card</a>
+                </li>
+                <li>
+                    <a href="products.html">Product List</a>
+                </li>
+                <li>
+                    <a href="weather.html">Weather App</a>
+                </li>
+            </ul>
+        </nav>
+    </body>
+</html>

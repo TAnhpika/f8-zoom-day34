@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather App</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            #root {
+                width: 100%;
+                max-width: 500px;
+            }
+            label {
+                display: block;
+                font-style: 16px;
+                font-weight: 600;
+                margin-bottom: 8px;
+                color: #333;
+            }
+            select {
+                width: 100%;
+                padding: 12px;
+                font-size: 16px;
+                border: none;
+                border-radius: 8px;
+                background-color: white;
+                cursor: pointer;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
+
+            select:hover {
+                transform: translateY(-2px);
+            }
+
+            h2 {
+                text-align: center;
+                color: #333;
+                margin: 20px 0;
+                font-size: 24px;
+            }
+
+            ul {
+                list-style: none;
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                margin-bottom: 20px;
+            }
+
+            li {
+                padding: 12px 0;
+                font-size: 18px;
+                color: #555;
+                border-bottom: 1px solid #eee;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            li:last-child {
+                border-bottom: none;
+            }
+
+            li strong {
+                color: #667eea;
+                font-weight: 600;
+            }
+
+            button {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
+                font-weight: 600;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: transform 0.2s;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script
+            crossorigin
+            src="https://unpkg.com/react@18/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <script type="text/babel">
+            const weatherData = {
+                hanoi: {
+                    city: "Hà Nội",
+                    temp: 28,
+                    weather: "Nắng",
+                    humidity: 65,
+                },
+                hcm: {
+                    city: "TP.HCM",
+                    temp: 32,
+                    weather: "Có mây",
+                    humidity: 78,
+                },
+                danang: {
+                    city: "Đà Nẵng",
+                    temp: 30,
+                    weather: "Mưa nhẹ",
+                    humidity: 82,
+                },
+            };
+
+            function Weather() {
+                const [city, setCity] = React.useState("hanoi");
+                const [weatherValue, setWeatherValue] = React.useState(
+                    weatherData.hanoi,
+                );
+                const selectedCity = weatherData[city];
+
+                const handleChange = (e) => {
+                    const key = e.target.value;
+                    setCity(key);
+                    setWeatherValue(weatherData[key]);
+                };
+
+                const getWeatherIcon = (weather) => {
+                    if (weather.toLowerCase().includes("nắng")) return "☀️";
+                    if (weather.toLowerCase().includes("mây")) return "🌤️";
+                    if (weather.toLowerCase().includes("mưa")) return "🌧️";
+                    return "❓";
+                };
+
+                const randomOffset = (base, range) => {
+                    return (
+                        base +
+                        Math.floor(Math.random() * (range * 2 + 1)) -
+                        range
+                    );
+                };
+
+                const refreshWeather = () => {
+                    setWeatherValue((prev) => ({
+                        ...prev,
+                        temp: randomOffset(selectedCity.temp, 5),
+                        humidity: randomOffset(selectedCity.humidity, 5),
+                    }));
+                };
+
+                return (
+                    <>
+                        <label htmlFor="cities">Choose a city:</label>
+                        <select
+                            name="cities"
+                            id="cities"
+                            onChange={handleChange}
+                            value={city}
+                        >
+                            <option value="hanoi">Hà Nội</option>
+                            <option value="hcm">TP.HCM</option>
+                            <option value="danang">Đà Nẵng</option>
+                        </select>
+                        <h2>Weather data:</h2>
+                        <ul>
+                            <li>{selectedCity.city}</li>
+                            <li>{weatherValue.temp}</li>
+                            <li>
+                                <strong>{selectedCity.weather}</strong>{" "}
+                                {getWeatherIcon(selectedCity.weather)}
+                            </li>
+                            <li>{weatherValue.humidity}</li>
+                        </ul>
+                        <button type="button" onClick={refreshWeather}>
+                            Làm mới
+                        </button>
+                    </>
+                );
+            }
+            const root = ReactDOM.createRoot(document.querySelector("#root"));
+            root.render(<Weather />);
+        </script>
+    </body>
+</html>

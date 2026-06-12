@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Todo App</title>
+
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                min-height: 100vh;
+                font-family: "Segoe UI", Roboto, sans-serif;
+                background: #f7f8fb;
+                color: #222;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 24px;
+            }
+            #root {
+                width: 100%;
+                max-width: 520px;
+            }
+            .header {
+                margin-bottom: 22px;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .todo-form {
+                display: flex;
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+
+            .todo-form input {
+                flex: 1;
+                padding: 14px 16px;
+                border: 1px solid #dde3f0;
+                border-radius: 12px;
+                outline: none;
+                transition:
+                    border-color 0.2s ease,
+                    box-shadow 0.2s ease;
+            }
+
+            .todo-form input:focus {
+                border-color: #7b98ff;
+                box-shadow: 0 0 0 4px rgba(123, 152, 255, 0.12);
+            }
+
+            .todo-form button {
+                padding: 14px 20px;
+                border: none;
+                border-radius: 12px;
+                background: #5566ff;
+                color: #fff;
+                font-weight: 600;
+                cursor: pointer;
+                transition:
+                    background-color 0.2s ease,
+                    transform 0.2s ease;
+            }
+            .todo-form button:hover {
+                background: #4354e1;
+                transform: translateY(-1px);
+            }
+            .todo-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .todo-item {
+                display: flex;
+                gap: 14px;
+                align-items: center;
+                padding: 14px 16px;
+                border-radius: 14px;
+                border: 1px solid #eef2fa;
+                margin-bottom: 12px;
+                background: #f8f9ff;
+            }
+            .todo-item span {
+                flex: 1;
+            }
+            .todo-item button {
+                border: none;
+                background: transparent;
+                color: #ff5a5f;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@18/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+        <script type="text/babel">
+            let uniqId = 0;
+
+            function TodoApp() {
+                const [inputValue, setInputValue] = React.useState("");
+                const [todos, setTodos] = React.useState([]);
+
+                const handleInputChange = (e) => {
+                    setInputValue(e.target.value);
+                };
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    if (inputValue.trim()) {
+                        setTodos([
+                            ...todos,
+                            {
+                                id: ++uniqId,
+                                text: inputValue,
+                                completed: false,
+                            },
+                        ]);
+                        setInputValue("");
+                    }
+                };
+
+                const handleDelete = (id) => {
+                    setTodos(todos.filter((todo) => todo.id !== id));
+                };
+
+                const handleToggle = (id) => {
+                    setTodos(
+                        todos.map((todo) =>
+                            todo.id === id
+                                ? { ...todo, completed: !todo.completed }
+                                : todo,
+                        ),
+                    );
+                };
+
+                const totalTasks = todos.length;
+                const completedTasks = todos.filter(
+                    (todo) => todo.completed,
+                ).length;
+                const remainingTasks = totalTasks - completedTasks;
+
+                return (
+                    <div className="app-card">
+                        <div className="header">
+                            Tổng: {totalTasks} task(s), Hoàn thành:{" "}
+                            {completedTasks} task(s), Còn lại: {remainingTasks}
+                        </div>
+                        <form onSubmit={handleSubmit} className="todo-form">
+                            <input
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                placeholder="Nhập task mới..."
+                            />
+                            <button type="submit">Thêm</button>
+                        </form>
+
+                        {todos.length === 0 ? (
+                            <p style={{ color: "gray", fontStyle: "italic" }}>
+                                Chưa có task nào. Hãy thêm task đầu tiên!
+                            </p>
+                        ) : (
+                            <ul className="todo-list">
+                                {todos.map((todo) => (
+                                    <li key={todo.id} className="todo-item">
+                                        <input
+                                            type="checkbox"
+                                            checked={todo.completed}
+                                            onChange={() =>
+                                                handleToggle(todo.id)
+                                            }
+                                            style={{ marginRight: "8px" }}
+                                        />
+                                        <span
+                                            style={{
+                                                textDecoration: todo.completed
+                                                    ? "line-through"
+                                                    : "none",
+                                                marginRight: "auto",
+                                            }}
+                                        >
+                                            {todo.text}
+                                        </span>
+                                        <button
+                                            onClick={() =>
+                                                handleDelete(todo.id)
+                                            }
+                                            style={{ marginLeft: "16px" }}
+                                        >
+                                            Xóa
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                );
+            }
+            const root = ReactDOM.createRoot(document.querySelector("#root"));
+            root.render(<TodoApp />);
+        </script>
+    </body>
+</html>
